@@ -1,4 +1,3 @@
-```markdown
 # Git History Analyzer
 
 This package provides a simple way to analyze the commit history of a specified file in a Git repository. It retrieves the complete commit history along with the changes made in each commit, allowing users to track modifications effectively.
@@ -8,7 +7,6 @@ This package provides a simple way to analyze the commit history of a specified 
 - Retrieve commit history for a specific file.
 - Display details such as commit ID, author, date, and commit message.
 - Track line changes with added and removed lines.
-```
 
 ## Installation
 You can install the package using pip:
