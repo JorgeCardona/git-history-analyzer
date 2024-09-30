@@ -1,5 +1,7 @@
 # Git History Analyzer
 
+https://pypi.org/project/git-history-analyzer/
+
 This package provides a simple way to analyze the commit history of a specified file in a Git repository. It retrieves the complete commit history along with the changes made in each commit, allowing users to track modifications effectively.
 
 ## Features
