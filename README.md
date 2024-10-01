@@ -70,9 +70,9 @@ GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
 ```
 
 ## Example Output - blame report
-![blame](images/blame.png)
+![blame](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imagesblame.png)
 
-![git_blame_report](images/git_blame_report.png)
+![git_blame_report](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imagesgit_blame_report.png)
 
 ## Example log_history report
 ```python
@@ -88,9 +88,9 @@ GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
 ```
 
 ## Example Output - log_history report
-![log_history](images/log_history.png)
+![log_history](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imageslog_history.png)
 
-![git_log_history_report](images/git_log_history_report.png)
+![git_log_history_report](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imagesgit_log_history_report.png)
 
 
 GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
@@ -110,11 +110,11 @@ GitCommitsReportGenerator(list_files_to_read=list_files_to_read)
 ```
 
 ## Example Output - log_history report (Without Print Details)
-![Alt text](images/blame_log_history.png)
+![Alt text](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imagesblame_log_history.png)
 
-![git_blame_report](images/git_blame_report.png)
+![git_blame_report](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imagesgit_blame_report.png)
 
-![git_log_history_report](images/git_log_history_report.png)
+![git_log_history_report](https://github.com/JorgeCardona/git-history-analyzer/blob/main/imagesgit_log_history_report.png)
 
 ## Contributing
 
