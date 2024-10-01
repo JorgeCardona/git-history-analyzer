@@ -92,11 +92,6 @@ GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
 
 ![git_log_history_report](https://raw.githubusercontent.com/JorgeCardona/git-history-analyzer/refs/heads/main/images/git_log_history_report.png)
 
-
-GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
-                             report_type=['log_history']
-                             print_details=True)
-
 ### Log History and Blame Reports (Without Print Details)
 ```python
 from git_history_analyzer import GitCommitsReportGenerator
