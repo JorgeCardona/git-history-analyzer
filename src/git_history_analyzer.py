@@ -75,9 +75,6 @@ class GitCommitsReportGenerator:
                     history_directory_to_save_report=self.history_directory_to_save_report,
                     history_report_name_to_save=self.history_report_name_to_save)
 
-
-
-        
     def create_blame_report(self, 
                             blame_file_to_read,
                             blame_print_details,
@@ -105,7 +102,6 @@ class GitCommitsReportGenerator:
                                         blame_report_name_to_save=blame_report_name_to_save
                                         )
 
-            
     def create_log_history_report(self, 
                                 history_file_to_read,
                                 history_print_details,
@@ -133,13 +129,9 @@ class GitCommitsReportGenerator:
                                         history_report_name_to_save=history_report_name_to_save
                                         )
 
-
     def generate_report_name_and_report_directory(self, directory_to_save_report, report_name_to_save, file_to_read):
         """
         Generates the name and full directory path for saving an HTML report.
-
-        This function creates the specified directory if it does not exist and constructs 
-        a report file name using the provided report name and file name.
 
         Parameters:
         directory_to_save_report (str): The relative or absolute path to the directory where the report will be saved.
@@ -152,19 +144,21 @@ class GitCommitsReportGenerator:
             - report_directory (str): The full path to the report file, including the directory and file name.
         """
         
+        # Use os.path.join to handle paths correctly for Linux
         current_directory = os.getcwd()
-        final_directory = f'{current_directory}{directory_to_save_report}'
+        final_directory = current_directory + directory_to_save_report
 
-        # Normalize the report directory path to avoid issues on Windows
-        final_directory = final_directory.replace('/', '\\')
-        file_to_read = file_to_read.replace(':', '_').replace('/', '\\').replace('/', '_').replace('\\', '_')
+        # Ensure file name is valid (replace any unwanted characters)
+        file_to_read = file_to_read.replace(':', '_').replace('/', '_').replace('\\', '_')
 
         # Create the directory if it does not exist
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
 
+        # Construct report name
         report_name = f'{report_name_to_save}_{file_to_read}.html'
 
+        # Full path to the report
         report_directory = os.path.join(final_directory, report_name)
 
         return report_name, report_directory
@@ -421,7 +415,7 @@ class GitCommitsReportGenerator:
         """
         
         # Save the HTML file with ISO-8859-1 encoding
-        with open(report_directory, 'w', encoding='utf-8') as file:
+        with open(report_directory, 'w', encoding='utf-16') as file:
             file.write(html_content)
 
         print(f"Styled GIT BLAME HTML report with sorting and filters generated: {report_name}")
@@ -604,8 +598,8 @@ class GitCommitsReportGenerator:
         </html>
         """
         
-        # Save the HTML report to a file with ISO-8859-1 encoding
-        with open(report_directory, 'w', encoding='ISO-8859-1') as file:
+        # Save the HTML report to a file with utf-16 encoding
+        with open(report_directory, 'w', encoding='utf-16') as file:
             file.write(html_content)
 
         print(f"GIT HISTORY HTML report generated: {history_report_name_to_save}")

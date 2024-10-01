@@ -25,7 +25,7 @@ Here's how to use the `GitCommitsReportGenerator` function:
 
 report_type=['blame', 'log_history'], print_details=False
 
-- `list_files_to_read` (list): list of The path to the files you want to analyze. Please use double slashes (//) or backslashes (\\) depending on the operating system you are using to avoid directory-related issues.
+- `list_files_to_read` (list): list of The path to the files you want to analyze. Please use single slashes (/) for linux or double backslashes (\\\\) for windows, depending on the operating system you are using to avoid directory-related issues.
 - `report_type` (list) ['blame', 'log_history']
 - `print_details` (bool): If set to `True`, the function will print the details of each commit. Default is `False`.
 
