@@ -42,6 +42,40 @@ class GitCommitsReportGenerator:
         self.generate_commit_reports(report_type=self.report_type, list_files_to_read=self.list_files_to_read)
 
 
+    def generate_report_name_and_report_directory(self, directory_to_save_report, report_name_to_save, file_to_read):
+            """
+            Generates the name and full directory path for saving an HTML report.
+
+            Parameters:
+            directory_to_save_report (str): The relative or absolute path to the directory where the report will be saved.
+            report_name_to_save (str): The base name for the report file.
+            file_to_read (str): The name of the file related to the report, which will be appended to the report name.
+
+            Returns:
+            tuple: A tuple containing:
+                - report_name (str): The complete name of the report file, including the .html extension.
+                - report_directory (str): The full path to the report file, including the directory and file name.
+            """
+            
+            # Use os.path.join to handle paths correctly for Linux
+            current_directory = os.getcwd()
+            final_directory = current_directory.replace('\\', '/') + directory_to_save_report.replace('\\', '/')
+
+            # Ensure file name is valid (replace any unwanted characters)
+            file_to_read = file_to_read.replace(':', '_').replace('/', '_').replace('\\', '_')
+
+            # Create the directory if it does not exist
+            if not os.path.exists(final_directory):
+                os.makedirs(final_directory)
+
+            # Construct report name
+            report_name = f'{report_name_to_save}_{file_to_read}.html'
+
+            # Full path to the report
+            report_directory = os.path.join(final_directory, report_name)
+
+            return report_name, report_directory
+
     def generate_commit_reports(self, report_type, list_files_to_read):
         """
         Generates either blame or log history reports for a list of files based on the specified report type.
@@ -128,40 +162,6 @@ class GitCommitsReportGenerator:
                                         history_directory_to_save_report=history_directory_to_save_report,
                                         history_report_name_to_save=history_report_name_to_save
                                         )
-
-    def generate_report_name_and_report_directory(self, directory_to_save_report, report_name_to_save, file_to_read):
-        """
-        Generates the name and full directory path for saving an HTML report.
-
-        Parameters:
-        directory_to_save_report (str): The relative or absolute path to the directory where the report will be saved.
-        report_name_to_save (str): The base name for the report file.
-        file_to_read (str): The name of the file related to the report, which will be appended to the report name.
-
-        Returns:
-        tuple: A tuple containing:
-            - report_name (str): The complete name of the report file, including the .html extension.
-            - report_directory (str): The full path to the report file, including the directory and file name.
-        """
-        
-        # Use os.path.join to handle paths correctly for Linux
-        current_directory = os.getcwd()
-        final_directory = current_directory + directory_to_save_report
-
-        # Ensure file name is valid (replace any unwanted characters)
-        file_to_read = file_to_read.replace(':', '_').replace('/', '_').replace('\\', '_')
-
-        # Create the directory if it does not exist
-        if not os.path.exists(final_directory):
-            os.makedirs(final_directory)
-
-        # Construct report name
-        report_name = f'{report_name_to_save}_{file_to_read}.html'
-
-        # Full path to the report
-        report_directory = os.path.join(final_directory, report_name)
-
-        return report_name, report_directory
 
     def git_blame_with_commit_details(self, blame_file_to_read, blame_print_details=False):
         """
