@@ -690,10 +690,3 @@ class GitCommitsReportGenerator:
                 print()
 
         return history_list  # Return the list of commit details with line changes
-
-
-list_files_to_read = ['C:\\Users\\USUARIO\\Documents\\satellite_notifier\\main.py',
-                      'C:\\Users\\USUARIO\\Documents\\satellite_notifier\\.github\workflows\\main.yml',
-                      'C:\\Users\\USUARIO\Documents\\satellite_notifier\\README.md']
-
-instance = GitCommitsReportGenerator(list_files_to_read=list_files_to_read)

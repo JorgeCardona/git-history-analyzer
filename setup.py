@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setuptools.setup(
     name="git-history-analyzer",
-    version="0.0.1",
+    version="0.0.3",
     author="Jorge Cardona",
     description="Descripción del paquete",
     long_description=long_description,

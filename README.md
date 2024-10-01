@@ -1,3 +1,4 @@
+# ⚠️☢️☣️ For this to work properly, it must be run within the main folder of a Git repository and Git must be installed. ☣️☢️⚠️
 # Git History Analyzer
 
 https://pypi.org/project/git-history-analyzer/
@@ -18,7 +19,7 @@ pip install git-history-analyzer
 
 ## Usage
 
-Here's how to use the `GitHistoryAnalyzer` function:
+Here's how to use the `GitCommitsReportGenerator` function:
 
 ## Parameters
 
@@ -63,8 +64,8 @@ from git_history_analyzer import GitCommitsReportGenerator
 list_files_to_read = ['C:\\Users\\USUARIO\\Documents\\satellite_notifier\\main.py',
                       'C:\\Users\\USUARIO\\Documents\\satellite_notifier\\.github\workflows\\main.yml']
 
-GitHistoryAnalyzer(list_files_to_read=list_files_to_read,
-                            report_type=['blame']
+GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
+                            report_type=['blame'],
                             print_details=True)
 ```
 
@@ -81,8 +82,8 @@ from git_history_analyzer import GitCommitsReportGenerator
 list_files_to_read = ['C:\\Users\\USUARIO\\Documents\\satellite_notifier\\main.py',
                       'C:\\Users\\USUARIO\\Documents\\satellite_notifier\\.github\workflows\\main.yml']
 
-GitHistoryAnalyzer(list_files_to_read=list_files_to_read,
-                            report_type=['blame']
+GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
+                            report_type=['log_history'],
                             print_details=True)
 ```
 
@@ -92,12 +93,12 @@ GitHistoryAnalyzer(list_files_to_read=list_files_to_read,
 ![git_log_history_report](images/git_log_history_report.png)
 
 
-GitHistoryAnalyzer(list_files_to_read=list_files_to_read,
+GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
                              report_type=['log_history']
                              print_details=True)
 
 ### Log History and Blame Reports (Without Print Details)
-GitHistoryAnalyzer(list_files_to_read=list_files_to_read)
+GitCommitsReportGenerator(list_files_to_read=list_files_to_read)
 ```python
 from git_history_analyzer import GitCommitsReportGenerator
 
@@ -105,7 +106,7 @@ from git_history_analyzer import GitCommitsReportGenerator
 list_files_to_read = ['C:\\Users\\USUARIO\\Documents\\satellite_notifier\\main.py',
                       'C:\\Users\\USUARIO\\Documents\\satellite_notifier\\.github\workflows\\main.yml']
 
-GitHistoryAnalyzer(list_files_to_read=list_files_to_read)
+GitCommitsReportGenerator(list_files_to_read=list_files_to_read)
 ```
 
 ## Example Output - log_history report (Without Print Details)
