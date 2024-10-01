@@ -98,7 +98,6 @@ GitCommitsReportGenerator(list_files_to_read=list_files_to_read,
                              print_details=True)
 
 ### Log History and Blame Reports (Without Print Details)
-GitCommitsReportGenerator(list_files_to_read=list_files_to_read)
 ```python
 from git_history_analyzer import GitCommitsReportGenerator
 
