@@ -32,6 +32,7 @@ report_type=['blame', 'log_history'], print_details=False
 ## Output
 
 The function returns a list of dictionaries, where each dictionary contains:
+- `Branch`: The branch currently under analysis.
 - `commit_id`: The ID of the commit.
 - `commit_author`: The author of the commit.
 - `commit_email`: The author's email address.
