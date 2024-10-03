@@ -27,9 +27,17 @@ jobs:
         with:
           python-version: '3.11.7'  # Specifies the exact Python version to be used
 
-      - name: Install dependencies  # Installs the necessary Python dependencies to build the package
-        run: |
-          python -m pip install --upgrade pip setuptools wheel twine  # # Upgrades pip to the latest version Installs the 'build' package for creating distribution files
+      - name: Upgrade pip  # Upgrades pip to the latest version
+        run: python -m pip install --upgrade pip  # Installs the latest version of pip
+
+      - name: Install setuptools  # Installs setuptools package
+        run: pip install setuptools  # Installs setuptools
+
+      - name: Install wheel  # Installs wheel package
+        run: pip install wheel  # Installs wheel
+
+      - name: Install twine  # Installs twine package
+        run: pip install twine  # Installs twine
 
       - name: Set version based on Git tag  # Dynamically sets the package version based on the latest Git tag
         id: get_version  # Step ID for referencing outputs later
