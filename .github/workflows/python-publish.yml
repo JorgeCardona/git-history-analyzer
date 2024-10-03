@@ -1,0 +1,48 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Upload Python Package  # The name of the GitHub Actions workflow
+
+on:
+  release:  # This section defines when the workflow will be triggered
+    types: [published]  # Specifies that the workflow will run when a release is published
+  workflow_dispatch:  # Allows the workflow to be manually triggered from the Actions tab in GitHub
+
+permissions:
+  contents: read  # Grants read-only permission to the repository contents for this workflow
+
+jobs:
+  deploy:  # Defines the 'deploy' job which performs the actions for this workflow
+
+    runs-on: ubuntu-latest  # Specifies the environment to run this job in, which is the latest Ubuntu version
+
+    steps:
+    - uses: actions/checkout@v4  # Step to check out the repository code from GitHub
+
+    - name: Set up Python  # Step to set up the Python environment
+      uses: actions/setup-python@v3  # GitHub Action to set up Python
+      with:
+        python-version: '3.11.7'  # Specifies the exact Python version to be used (3.11.7)
+
+    - name: Install dependencies  # Step to install Python dependencies required to build the package
+      run: |
+        python -m pip install --upgrade pip  # Upgrades pip to the latest version
+        pip install build  # Installs the 'build' package, which is used to create the distribution files
+
+    - name: Set version based on Git tag  # Step to dynamically set the package version based on the latest Git tag
+      id: get_version  # Step ID for referencing outputs from this step later
+      run: echo "PACKAGE_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV  # Gets the latest Git tag and sets it as an environment variable
+
+    - name: Build package  # Step to build the Python package
+      run: python setup.py sdist bdist_wheel  # Uses setup.py to create both source distribution and wheel distribution
+
+    - name: Publish package  # Step to publish the built package to PyPI
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29  # PyPI publish action
+      with:
+        user: __token__  # Uses PyPI authentication token for the user
+        password: ${{ secrets.PYPI_API_TOKEN }}  # Retrieves the PyPI API token from GitHub Secrets for authentication
