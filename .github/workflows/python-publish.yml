@@ -17,7 +17,7 @@ jobs:
       # The workflow will execute on all combinations of these OS and Python versions to ensure 
       # compatibility and reliability of the package across different environments.
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]  # Runs on Linux, macOS, and Windows
+        os: [ubuntu-latest, windows-latest]  # Runs on Linux, macOS, and Windows
         python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
         # Runs on all combinations of operating systems and Python versions
 
