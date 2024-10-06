@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest  # Runs on Ubuntu
     strategy:
       matrix:
-        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
+        python-version: [3.10, 3.11, 3.12]  # Define multiple Python versions available for Ubuntu
 
     steps:
       - uses: actions/checkout@v4  # Checks out the repository code from GitHub
@@ -46,7 +46,7 @@ jobs:
     runs-on: macos-latest  # Runs on macOS
     strategy:
       matrix:
-        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
+        python-version: [3.10, 3.11, 3.12]  # Define multiple Python versions available for macOS
 
     steps:
       - uses: actions/checkout@v4  # Checks out the repository code from GitHub
@@ -79,7 +79,7 @@ jobs:
     runs-on: windows-latest  # Runs on Windows
     strategy:
       matrix:
-        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
+        python-version: [3.10, 3.11, 3.12]  # Define multiple Python versions available for Windows
 
     steps:
       - uses: actions/checkout@v4  # Checks out the repository code from GitHub
