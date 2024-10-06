@@ -47,12 +47,12 @@ jobs:
         uses: actions/upload-artifact@v3  # Action to upload artifacts
         with:
           name: python-package  # Name for the uploaded artifact
-          path: dist/*  # Path to the built package in the dist directory
+          path: build/*  # Change this to point to the correct build directory
 
   publish:  # Defines the 'publish' job responsible for uploading the built package to PyPI.
-    needs: [deploy-ubuntu]  # This job depends on the successful completion of all 'deploy' jobs.
+    needs: [deploy-ubuntu]  # This job depends on the successful completion of the 'deploy' job.
     runs-on: ubuntu-latest  # This job runs on the Ubuntu environment.
-    if: success()  # This condition ensures that the 'publish' job only runs if all 'deploy' jobs were successful.
+    if: success()  # This condition ensures that the 'publish' job only runs if the 'deploy' job was successful.
 
     steps:
       - name: Download package artifact  # Downloads the built package from the previous job
@@ -65,4 +65,4 @@ jobs:
         with:
           user: __token__  # Uses PyPI authentication token for the user
           password: ${{ secrets.PYPI_API_TOKEN }}  # Retrieves the PyPI API token from GitHub Secrets for authentication
-          packages_dir: ./dist  # Specifies the directory of the downloaded package
+          packages_dir: ./build  # Specifies the directory of the downloaded package (make sure this matches where the package is)
