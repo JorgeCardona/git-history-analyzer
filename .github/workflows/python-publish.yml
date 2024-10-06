@@ -54,4 +54,5 @@ jobs:
         with:
           user: __token__  # Uses PyPI authentication token for the user
           password: ${{ secrets.PYPI_API_TOKEN }}  # Retrieves the PyPI API token from GitHub Secrets for authentication
-          package-version: ${{ env.PACKAGE_VERSION }}  # Uses the dynamically set package version from Git tag
+          packages-dir: dist  # Specify the directory containing the distribution packages
+          verify_metadata: true  # Verify package metadata before publishing
