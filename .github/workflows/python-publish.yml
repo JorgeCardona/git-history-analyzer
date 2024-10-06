@@ -1,3 +1,13 @@
+name: Publish Git History Analyzer Python Package  # The name of the GitHub Actions workflow
+
+on:
+  release:  # Trigger the workflow when a release is published
+    types: [published]  
+  workflow_dispatch:  # Allows manual triggering of the workflow from the Actions tab in GitHub
+
+permissions:
+  contents: read  # Grants read-only access to the repository contents for this workflow
+
 jobs:
   deploy-ubuntu:  # Defines the 'deploy' job for Ubuntu
     runs-on: ubuntu-latest  # Runs on Ubuntu
