@@ -55,8 +55,14 @@ jobs:
         with:
           name: python-package  # Artifact name to download
 
+      - name: List files in the working directory
+        run: ls -al
+
       - name: Unzip package
         run: unzip python-package.zip  # Unzip the downloaded zip file
+
+      - name: List files after unzip artifact
+        run: ls -al
 
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@v1.5.1
