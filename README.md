@@ -1,3 +1,5 @@
+[![Upload Python Package](https://github.com/JorgeCardona/git-history-analyzer/actions/workflows/python-publish.yml/badge.svg)](https://github.com/JorgeCardona/git-history-analyzer/actions/workflows/python-publish.yml)
+
 # ⚠️☢️☣️ For this to work properly, it must be run within the main folder of a Git repository and Git must be installed. ☣️☢️⚠️
 # Git History Analyzer
 
