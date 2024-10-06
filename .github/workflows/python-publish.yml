@@ -43,16 +43,26 @@ jobs:
       - name: Build package  # Builds the Python package
         run: python setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
 
+      - name: Upload package as artifact  # Uploads the built package for later jobs
+        uses: actions/upload-artifact@v3  # Action to upload artifacts
+        with:
+          name: python-package  # Name for the uploaded artifact
+          path: dist/*  # Path to the built package in the dist directory
+
   publish:  # Defines the 'publish' job responsible for uploading the built package to PyPI.
     needs: [deploy-ubuntu]  # This job depends on the successful completion of all 'deploy' jobs.
     runs-on: ubuntu-latest  # This job runs on the Ubuntu environment.
     if: success()  # This condition ensures that the 'publish' job only runs if all 'deploy' jobs were successful.
 
     steps:
+      - name: Download package artifact  # Downloads the built package from the previous job
+        uses: actions/download-artifact@v3  # Action to download artifacts
+        with:
+          name: python-package  # Name of the artifact to download
+
       - name: Publish package  # Publishes the built package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.5.1  # Uses the latest stable version of the PyPI publish action
         with:
           user: __token__  # Uses PyPI authentication token for the user
           password: ${{ secrets.PYPI_API_TOKEN }}  # Retrieves the PyPI API token from GitHub Secrets for authentication
-          packages-dir: dist  # Specify the directory containing the distribution packages
-          verify_metadata: true  # Verify package metadata before publishing
+          packages_dir: ./dist  # Specifies the directory of the downloaded package
