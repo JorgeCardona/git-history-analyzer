@@ -9,60 +9,58 @@ permissions:
   contents: read  # Grants read-only access to the repository contents for this workflow
 
 jobs:
-  deploy-ubuntu:  # Job for deploying on Ubuntu
-    runs-on: ubuntu-24.04
+  build:  # Job for building the package
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define specific Python versions for Ubuntu
+        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define specific Python versions for building
 
     steps:
       - uses: actions/checkout@v4  # Checks out the repository code from GitHub
 
       - name: Set up Python  # Sets up the Python environment
-        uses: actions/setup-python@v5  # Action to set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}  # Uses the specific Python version from the matrix
 
       - name: Upgrade pip  # Upgrades pip to the latest version
-        run: python -m pip install --upgrade pip  # Installs the latest version of pip
+        run: python -m pip install --upgrade pip
 
       - name: Install setuptools  # Installs setuptools package
-        run: pip install setuptools  # Installs setuptools
+        run: pip install setuptools
 
       - name: Install wheel  # Installs wheel package
-        run: pip install wheel  # Installs wheel
-
-      - name: Install twine  # Installs twine package
-        run: pip install twine  # Installs twine
-
-      - name: Set version based on Git tag  # Dynamically sets the package version based on the latest Git tag
-        id: get_version  # Step ID for referencing outputs later
-        run: echo "PACKAGE_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV  # Retrieves the latest Git tag and sets it as an environment variable
+        run: pip install wheel
 
       - name: Build package  # Builds the Python package
-        run: python setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
+        run: python setup.py sdist bdist_wheel
 
-      - name: Upload package as artifact  # Uploads the built package for later jobs
-        uses: actions/upload-artifact@v3  # Action to upload artifacts
+      - name: Zip build directory  # Zips the build directory
+        run: zip -r build.zip build/  # Creates a zip file of the build directory
+
+      - name: Upload build artifact  # Uploads the zipped build artifact for later jobs
+        uses: actions/upload-artifact@v3
         with:
-          name: python-package  # Name for the uploaded artifact
-          path: build/*  # Change this to point to the correct build directory
+          name: python-package  # Name of the artifact
+          path: build.zip  # Path to the zipped build file
 
-  publish:  # Defines the 'publish' job responsible for uploading the built package to PyPI.
-    needs: [deploy-ubuntu]  # This job depends on the successful completion of the 'deploy' job.
-    runs-on: ubuntu-latest  # This job runs on the Ubuntu environment.
-    if: success()  # This condition ensures that the 'publish' job only runs if the 'deploy' job was successful.
+  publish:  # Job for publishing the package
+    needs: build  # This job depends on the successful completion of the 'build' job
+    runs-on: ubuntu-latest  # This job runs on the Ubuntu environment
 
     steps:
-      - name: Download package artifact  # Downloads the built package from the previous job
-        uses: actions/download-artifact@v3  # Action to download artifacts
+      - name: Download package artifact  # Downloads the zipped package from the previous job
+        uses: actions/download-artifact@v3
         with:
           name: python-package  # Name of the artifact to download
 
+      - name: Unzip package  # Unzips the downloaded package
+        run: unzip python-package.zip  # Unzips the build package
+
       - name: Publish package  # Publishes the built package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.5.1  # Uses the latest stable version of the PyPI publish action
+        uses: pypa/gh-action-pypi-publish@v1.5.1
         with:
           user: __token__  # Uses PyPI authentication token for the user
           password: ${{ secrets.PYPI_API_TOKEN }}  # Retrieves the PyPI API token from GitHub Secrets for authentication
-          packages_dir: ./build  # Specifies the directory of the downloaded package (make sure this matches where the package is)
+          packages_dir: ./build  # Specifies the directory of the unzipped package
