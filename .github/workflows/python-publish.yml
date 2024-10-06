@@ -59,7 +59,7 @@ jobs:
         run: ls -al
 
       - name: Unzip package
-        run: unzip python-package.zip  # Unzip the downloaded zip file
+        run: unzip build.zip  # Unzip the downloaded zip file
 
       - name: List files after unzip artifact
         run: ls -al
