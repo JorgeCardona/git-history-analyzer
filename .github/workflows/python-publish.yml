@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   deploy-ubuntu:  # Job for deploying on Ubuntu
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -44,7 +44,7 @@ jobs:
         run: python setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
 
   deploy-macos:  # Job for deploying on macOS
-    runs-on: macos-latest
+    runs-on: macos-13
 
     strategy:
       matrix:
@@ -78,7 +78,7 @@ jobs:
         run: python setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
 
   deploy-windows:  # Job for deploying on Windows
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     strategy:
       matrix:
