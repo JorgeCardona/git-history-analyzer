@@ -1,27 +1,9 @@
-name: Publish Git History Analyzer Python Package  # The name of the GitHub Actions workflow
-
-on:
-  release:  # Trigger the workflow when a release is published
-    types: [published]  
-  workflow_dispatch:  # Allows manual triggering of the workflow from the Actions tab in GitHub
-
-permissions:
-  contents: read  # Grants read-only access to the repository contents for this workflow
-
 jobs:
-  deploy:  # Defines the 'deploy' job that performs the deployment actions
-
+  deploy-ubuntu:  # Defines the 'deploy' job for Ubuntu
+    runs-on: ubuntu-latest  # Runs on Ubuntu
     strategy:
-      # This strategy defines a matrix to test the workflow across multiple operating systems
-      # (Ubuntu, macOS, and Windows) and multiple versions of Python (3.10.13, 3.11.7, 3.12.3).
-      # The workflow will execute on all combinations of these OS and Python versions to ensure 
-      # compatibility and reliability of the package across different environments.
       matrix:
-        os: [ubuntu-latest, windows-latest]  # Runs on Linux, macOS, and Windows
         python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
-        # Runs on all combinations of operating systems and Python versions
-
-    runs-on: ${{ matrix.os }}  # Runs on the operating system defined in the matrix
 
     steps:
       - uses: actions/checkout@v4  # Checks out the repository code from GitHub
@@ -50,10 +32,76 @@ jobs:
       - name: Build package  # Builds the Python package
         run: python setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
 
-  publish:  # Defines the 'publish' job responsible for uploading the built package to PyPI.
-    needs: deploy  # This job depends on the successful completion of the 'deploy' job.
+  deploy-macos:  # Defines the 'deploy' job for macOS
+    runs-on: macos-latest  # Runs on macOS
+    strategy:
+      matrix:
+        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
+
+    steps:
+      - uses: actions/checkout@v4  # Checks out the repository code from GitHub
+
+      - name: Set up Python  # Sets up the Python environment
+        uses: actions/setup-python@v5  # Action to set up Python
+        with:
+          python-version: ${{ matrix.python-version }}  # Uses the specific Python version from the matrix
+
+      - name: Upgrade pip  # Upgrades pip to the latest version
+        run: python -m pip install --upgrade pip  # Installs the latest version of pip
+
+      - name: Install setuptools  # Installs setuptools package
+        run: pip install setuptools  # Installs setuptools
+
+      - name: Install wheel  # Installs wheel package
+        run: pip install wheel  # Installs wheel
+
+      - name: Install twine  # Installs twine package
+        run: pip install twine  # Installs twine
+        
+      - name: Set version based on Git tag  # Dynamically sets the package version based on the latest Git tag
+        id: get_version  # Step ID for referencing outputs later
+        run: echo "PACKAGE_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV  # Retrieves the latest Git tag and sets it as an environment variable
+
+      - name: Build package  # Builds the Python package
+        run: python setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
+
+  deploy-windows:  # Defines the 'deploy' job for Windows
+    runs-on: windows-latest  # Runs on Windows
+    strategy:
+      matrix:
+        python-version: [3.10.13, 3.11.7, 3.12.3]  # Define multiple Python versions
+
+    steps:
+      - uses: actions/checkout@v4  # Checks out the repository code from GitHub
+
+      - name: Set up Python  # Sets up the Python environment
+        uses: actions/setup-python@v5  # Action to set up Python
+        with:
+          python-version: ${{ matrix.python-version }}  # Uses the specific Python version from the matrix
+
+      - name: Upgrade pip  # Upgrades pip to the latest version
+        run: py -m pip install --upgrade pip  # Installs the latest version of pip
+
+      - name: Install setuptools  # Installs setuptools package
+        run: py -m pip install setuptools  # Installs setuptools
+
+      - name: Install wheel  # Installs wheel package
+        run: py -m pip install wheel  # Installs wheel
+
+      - name: Install twine  # Installs twine package
+        run: py -m pip install twine  # Installs twine
+        
+      - name: Set version based on Git tag  # Dynamically sets the package version based on the latest Git tag
+        id: get_version  # Step ID for referencing outputs later
+        run: echo "PACKAGE_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV  # Retrieves the latest Git tag and sets it as an environment variable
+
+      - name: Build package  # Builds the Python package
+        run: py setup.py sdist bdist_wheel  # Uses setup.py to create source and wheel distributions
+
+  publish:  # Defines the 'publish' job responsible for uploading the built package to PyPI
+    needs: [deploy-ubuntu, deploy-macos, deploy-windows]  # This job depends on the successful completion of the deploy jobs.
     runs-on: ubuntu-latest  # This job runs on the Ubuntu environment; can be switched to macos-latest or windows-latest if needed for cross-platform testing.
-    if: success()  # This condition ensures that the 'publish' job only runs if the 'deploy' job was successful, preventing unnecessary uploads in case of failure.
+    if: success()  # This condition ensures that the 'publish' job only runs if the deploy jobs were successful, preventing unnecessary uploads in case of failure.
 
     steps:
       - name: Publish package  # Publishes the built package to PyPI
