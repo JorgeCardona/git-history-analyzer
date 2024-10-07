@@ -56,7 +56,7 @@ jobs:
 
       - name: Upload build artifact  # Upload the zip file as an artifact
         if: ${{ matrix.python-version == matrix.python-version[0] }}  # Compare with the FIRST version in the matrix dynamically
-        uses: actions/upload-artifact@v4  # Use the upload-artifact action
+        uses: actions/upload-artifact@v3  # Use the upload-artifact action
         with:
           name: python-package  # Name of the artifact
           path: build_dist.zip  # Path to the zip file to upload
@@ -67,7 +67,7 @@ jobs:
 
     steps:  # Steps to be executed in this job
       - name: Download package artifact  # Download the previously uploaded artifact
-        uses: actions/download-artifact@v4  # Use the download-artifact action
+        uses: actions/download-artifact@v3  # Use the download-artifact action
         with:
           name: python-package  # Name of the artifact to download
 
