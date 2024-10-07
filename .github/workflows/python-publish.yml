@@ -1,58 +1,57 @@
-name: Publish Git History Analyzer Python Package  # Name of the workflow
+name: Publish Git History Analyzer Python Package
 
 on:
-  release:  # Trigger the workflow on a release event
-    types: [published]  # Only when a release is published
-  workflow_dispatch:  # Allow manual triggering of the workflow
+  release:
+    types: [published]
+  workflow_dispatch:
 
 permissions:
-  contents: read  # Grant read access to repository contents
+  contents: read
 
 jobs:
-  build:  # Job to build the package
-    runs-on: ubuntu-latest  # Use the latest version of Ubuntu for the build
+  build:
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: [3.10.13, 3.11.7, 3.12.3]  # Specify Python version(s) for testing (additional versions can be added)
+        python-version: [3.10.13] # [3.10.13, 3.11.7, 3.12.3]
 
-    steps:  # Steps to be executed in this job
-      - uses: actions/checkout@v4  # Checkout the code from the repository
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Set up Python  # Step to set up the specified version of Python
-        uses: actions/setup-python@v5  # Use the setup-python action
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}  # Set Python version from the matrix
+          python-version: ${{ matrix.python-version }}
 
-      - name: Upgrade pip  # Upgrade pip to the latest version
+      - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Install setuptools  # Install setuptools for package building
+      - name: Install setuptools
         run: pip install setuptools
 
-      - name: Install wheel  # Install wheel for package distribution
+      - name: Install wheel
         run: pip install wheel
 
-      - name: Set package version from release tag  # Set package version based on the release tag
-        run: echo "PACKAGE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV  # Save version as an environment variable
+      - name: Set package version from release tag
+        run: echo "PACKAGE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+      - name: Build package
+        run: python setup.py sdist bdist_wheel
 
-      - name: Build package  # Build the package
-        run: python setup.py sdist bdist_wheel  # Create source and wheel distributions
-
-      - name: show current directory  # Display the current working directory
+      - name: show current directory
         run: pwd
 
-      - name: List files in the working directory  # List files in the working directory
+      - name: List files in the working directory
         run: ls -al
-        
-      - name: List files in build directory  # List files in the build directory
+
+      - name: List files in build directory
         run: ls -lR build
 
-      - name: List files in dist directory  # List files in the distribution directory
+      - name: List files in dist directory
         run: ls -lR dist
 
-      - name: Zip build and dist directories  # Create a zip file of the build and dist directories
-        run: zip -r build_dist.zip build/ dist/
+      - name: Zip build and dist directories
+        run: zip -r build_dist.zip build/ dist/   # Create the zip file
 
       - name: Upload build artifact  # Upload the zip file as an artifact
         if: ${{ matrix.python-version == matrix.python-version[0] }}  # Compare with the FIRST version in the matrix dynamically
@@ -60,38 +59,38 @@ jobs:
         with:
           name: python-package  # Name of the artifact
           path: build_dist.zip  # Path to the zip file to upload
-          
-  publish:  # Job to publish the package
-    needs: build  # This job depends on the successful completion of the build job
-    runs-on: ubuntu-latest  # Use the latest version of Ubuntu for publishing
 
-    steps:  # Steps to be executed in this job
-      - name: Download package artifact  # Download the previously uploaded artifact
-        uses: actions/download-artifact@v3  # Use the download-artifact action
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download package artifact
+        uses: actions/download-artifact@v3
         with:
-          name: python-package  # Name of the artifact to download
+          name: python-package  # Artifact name to download
 
-      - name: show current directory  # Display the current working directory
+      - name: show current directory
         run: pwd
-        
-      - name: List files in the working directory  # List files in the working directory
+
+      - name: List files in the working directory
         run: ls -al
 
-      - name: Unzip package  # Unzip the downloaded package
+      - name: Unzip package
         run: unzip build_dist.zip  # Unzip the downloaded zip file
 
-      - name: List files after unzip artifact  # List files in the working directory after unzipping
+      - name: List files after unzip artifact
         run: ls -al
 
-      - name: List files in build directory  # List files in the build directory after unzipping
+      - name: List files in build directory
         run: ls -lR build
 
-      - name: List files in dist directory  # List files in the distribution directory after unzipping
+      - name: List files in dist directory
         run: ls -lR dist
 
-      - name: Publish package  # Step to publish the package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.5.1  # Use the action for publishing to PyPI
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@v1.5.1
         with:
-          user: __token__  # Use the token-based authentication for PyPI
-          password: ${{ secrets.PYPI_API_TOKEN }}  # API token stored in GitHub Secrets for authentication
-          packages_dir: ./dist  # Directory containing the package files to publish
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages_dir: ./dist  # Ensure this points to the correct unpacked package directory
