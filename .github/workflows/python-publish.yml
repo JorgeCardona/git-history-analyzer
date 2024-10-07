@@ -53,11 +53,10 @@ jobs:
       - name: Zip build and dist directories
         run: zip -r build_dist.zip build/ dist/   # Create the zip file
 
-      - name: Upload build artifact  # Upload the zip file as an artifact
-        if: ${{ matrix.python-version == matrix.python-version[0] }}  # Compare with the FIRST version in the matrix dynamically
-        uses: actions/upload-artifact@v3  # Use the upload-artifact action
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: python-package  # Name of the artifact
+          name: python-package  # Artifact name
           path: build_dist.zip  # Path to the zip file to upload
 
   publish:
