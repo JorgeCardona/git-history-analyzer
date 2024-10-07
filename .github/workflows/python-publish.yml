@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.10.13]  # Specify Python version(s) for testing (additional versions can be added)
+        python-version: [3.10.13, 3.11.7, 3.12.3]  # Specify Python version(s) for testing (additional versions can be added)
 
     steps:  # Steps to be executed in this job
       - uses: actions/checkout@v4  # Checkout the code from the repository
@@ -55,11 +55,12 @@ jobs:
         run: zip -r build_dist.zip build/ dist/
 
       - name: Upload build artifact  # Upload the zip file as an artifact
-        uses: actions/upload-artifact@v3  # Use the upload-artifact action
+        if: ${{ matrix.python-version == matrix.python-version[-1] }}  # Compare with the last version in the matrix dynamically
+        uses: actions/upload-artifact@v4  # Use the upload-artifact action
         with:
           name: python-package  # Name of the artifact
           path: build_dist.zip  # Path to the zip file to upload
-
+          
   publish:  # Job to publish the package
     needs: build  # This job depends on the successful completion of the build job
     runs-on: ubuntu-latest  # Use the latest version of Ubuntu for publishing
