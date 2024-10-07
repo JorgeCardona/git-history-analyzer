@@ -64,6 +64,9 @@ jobs:
         with:
           name: python-package  # Artifact name to download
 
+      - name: show current directory
+        run: pwd
+        
       - name: List files in the working directory
         run: ls -al
 
