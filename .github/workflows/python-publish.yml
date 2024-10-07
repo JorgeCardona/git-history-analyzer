@@ -44,15 +44,18 @@ jobs:
         
       - name: List files in build directory
         run: ls -l build
-        
-      - name: Zip build directory
-        run: zip -r build.zip build/  # Create the zip file
+
+      - name: List files in dist directory
+        run: ls -l dist
+
+      - name: Zip build and dist directories
+        run: zip -r build_dist.zip build/ dist/   # Create the zip file
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: python-package  # Artifact name
-          path: build.zip  # Path to the zip file to upload
+          path: build_dist.zip  # Path to the zip file to upload
 
   publish:
     needs: build
@@ -71,7 +74,7 @@ jobs:
         run: ls -al
 
       - name: Unzip package
-        run: unzip build.zip  # Unzip the downloaded zip file
+        run: unzip build_dist.zip  # Unzip the downloaded zip file
 
       - name: List files after unzip artifact
         run: ls -al
