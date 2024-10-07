@@ -43,10 +43,10 @@ jobs:
         run: ls -al
         
       - name: List files in build directory
-        run: ls -l build
+        run: ls -lR build
 
       - name: List files in dist directory
-        run: ls -l dist
+        run: ls -lR dist
 
       - name: Zip build and dist directories
         run: zip -r build_dist.zip build/ dist/   # Create the zip file
@@ -80,8 +80,11 @@ jobs:
         run: ls -al
 
       - name: List files in build directory
-        run: ls -l build
-        
+        run: ls -lR build
+
+      - name: List files in dist directory
+        run: ls -lR dist
+
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@v1.5.1
         with:
