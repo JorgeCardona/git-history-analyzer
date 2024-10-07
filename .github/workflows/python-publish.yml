@@ -36,6 +36,12 @@ jobs:
       - name: Build package
         run: python setup.py sdist bdist_wheel
 
+      - name: show current directory
+        run: pwd
+
+      - name: List files in the working directory
+        run: ls -al
+        
       - name: List files in build directory
         run: ls -l build
         
