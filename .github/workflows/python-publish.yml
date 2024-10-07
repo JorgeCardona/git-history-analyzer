@@ -36,6 +36,9 @@ jobs:
       - name: Build package
         run: python setup.py sdist bdist_wheel
 
+      - name: List files in build directory
+        run: ls -l build
+        
       - name: Zip build directory
         run: zip -r build.zip build/  # Create the zip file
 
@@ -64,6 +67,9 @@ jobs:
       - name: List files after unzip artifact
         run: ls -al
 
+      - name: List files in build directory
+        run: ls -l build
+        
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@v1.5.1
         with:
