@@ -33,6 +33,9 @@ jobs:
       - name: Install wheel
         run: pip install wheel
 
+      - name: Set package version from release tag
+        run: echo "PACKAGE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+
       - name: Build package
         run: python setup.py sdist bdist_wheel
 
@@ -90,4 +93,4 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: ./build  # Ensure this points to the correct unpacked package directory
+          packages_dir: ./dist  # Ensure this points to the correct unpacked package directory
